@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscription Drip Technic</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --neon-pink: #ff3753;
+    --neon-cyan: #00ffcc;
+    --dark-bg: #0a0a0f;
+    --input-bg: rgba(30, 30, 40, 0.8);
+    --card-bg: rgba(20, 20, 30, 0.95);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--dark-bg);
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Background effects */
+.background-effects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(255, 55, 83, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(0, 255, 204, 0.1) 0%, transparent 40%),
+        linear-gradient(135deg, #0a0a0f 0%, #151520 100%);
+}
+
+/* Container principal */
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 55, 83, 0.1),
+        0 0 30px rgba(255, 55, 83, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+}
+
+/* Titre */
+h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 30px;
+    background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+}
+
+h2::after {
+    content: '🔥';
+    position: absolute;
+    margin-left: 10px;
+    animation: fire 1.5s infinite alternate;
+}
+
+/* Groupes de formulaire */
+.form-group {
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="tel"],
+input[type="email"] {
+    width: 100%;
+    padding: 16px;
+    background: var(--input-bg);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus {
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 0 3px rgba(255, 55, 83, 0.2);
+}
+
+/* Style personnalisé pour l'input file */
+.file-input-container {
+    position: relative;
+    margin-top: 8px;
+}
+
+.file-input-label {
+    display: block;
+    padding: 18px;
+    background: var(--input-bg);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+}
+
+.file-input-label:hover {
+    border-color: var(--neon-cyan);
+    background: rgba(0, 255, 204, 0.05);
+    color: var(--neon-cyan);
+}
+
+.file-input-label::before {
+    content: '📷';
+    display: block;
+    font-size: 24px;
+    margin-bottom: 8px;
+    opacity: 0.7;
+}
+
+input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Bouton d'inscription */
+button {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan));
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 10px 20px rgba(255, 55, 83, 0.3),
+        0 0 30px rgba(0, 255, 204, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+}
+
+button:hover::after {
+    left: 100%;
+}
+
+/* Message de retour */
+#message {
+    text-align: center;
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.message-success {
+    background: rgba(0, 255, 204, 0.1);
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+}
+
+.message-error {
+    background: rgba(255, 55, 83, 0.1);
+    border: 1px solid var(--neon-pink);
+    color: var(--neon-pink);
+}
+
+/* Animation feu */
+@keyframes fire {
+    0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.2) rotate(10deg);
+        opacity: 0.8;
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+    
+    h2 {
+        font-size: 1.8rem;
+    }
+    
+    input, button {
+        padding: 14px;
+    }
+}
+
+/* Effet de brillance */
+.glow-effect {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--neon-pink), transparent 70%);
+    filter: blur(80px);
+    opacity: 0.15;
+    animation: float 25s infinite linear;
+    z-index: -1;
+}
+
+.glow-effect:nth-child(2) {
+    background: radial-gradient(circle, var(--neon-cyan), transparent 70%);
+    animation-delay: -12.5s;
+    top: 60%;
+    left: 80%;
+}
+
+@keyframes float {
+    0% { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+}
+</style>
+</head>
+<body>
+    <!-- Effets de fond -->
+    <div class="background-effects"></div>
+    <div class="glow-effect" style="top: 20%; left: 10%;"></div>
+    <div class="glow-effect" style="top: 70%; left: 80%;"></div>
+
+    <div class="container">
+        <h2>Inscription Drip Technic</h2>
+        
+        <div class="form-group">
+            <label for="name">Nom complet</label>
+            <input type="text" id="name" placeholder="Votre nom complet" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Téléphone</label>
+            <input type="tel" id="phone" placeholder="Votre numéro de téléphone" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Votre adresse email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="photo">Photo de profil</label>
+            <div class="file-input-container">
+                <label class="file-input-label" for="photo">
+                    Cliquez pour télécharger votre photo
+                    <br>
+                    <small>Formats acceptés : JPG, PNG, GIF</small>
+                </label>
+                <input type="file" id="photo" accept="image/*" required>
+            </div>
+        </div>
+        
+        <button onclick="register()">S'inscrire maintenant</button>
+        
+        <div id="message" class="message-error"></div>
+    </div>
+
+<script>
+// Fonctions de base inchangées
+function getDB() {
+    return JSON.parse(localStorage.getItem("drip_db")) || { participants: [], votes: {} };
+}
+
+function saveDB(db) {
+    localStorage.setItem("drip_db", JSON.stringify(db));
+}
+
+// Fonction d'inscription améliorée visuellement
+function register() {
+    const name = document.getElementById('name');
+    const phone = document.getElementById('phone');
+    const email = document.getElementById('email');
+    const photo = document.getElementById('photo');
+    const message = document.getElementById('message');
+    
+    // Validation basique
+    if (!name.value.trim()) {
+        showMessage("Veuillez entrer votre nom", "error");
+        name.focus();
+        return;
+    }
+    
+    if (!phone.value.trim()) {
+        showMessage("Veuillez entrer votre numéro de téléphone", "error");
+        phone.focus();
+        return;
+    }
+    
+    if (!email.value.trim()) {
+        showMessage("Veuillez entrer votre email", "error");
+        email.focus();
+        return;
+    }
+    
+    const file = photo.files[0];
+    if (!file) {
+        showMessage("Une photo est obligatoire", "error");
+        return;
+    }
+    
+    // Validation de la taille de l'image (optionnelle)
+    if (file.size > 5 * 1024 * 1024) { // 5MB max
+        showMessage("La photo doit faire moins de 5MB", "error");
+        return;
+    }
+    
+    // Animation de chargement
+    const button = document.querySelector('button');
+    const originalText = button.textContent;
+    button.textContent = "Traitement en cours...";
+    button.disabled = true;
+    button.style.opacity = "0.7";
+    
+    let reader = new FileReader();
+    
+    reader.onload = function() {
+        let db = getDB();
+        let id = "DT-" + Math.random().toString(36).substr(2, 8);
+        
+        db.participants.push({
+            id: id,
+            name: name.value,
+            phone: phone.value,
+            email: email.value,
+            photo: reader.result,
+            paid: false,
+            validated: false,
+            smash: 0,
+            pass: 0
+        });
+        
+        saveDB(db);
+        
+        // Message de succès avant redirection
+        showMessage("Inscription réussie ! Redirection...", "success");
+        
+        // Redirection avec délai pour voir le message
+        setTimeout(() => {
+            location.href = "pay.html?id=" + id;
+        }, 1500);
+    };
+    
+    reader.onerror = function() {
+        button.textContent = originalText;
+        button.disabled = false;
+        button.style.opacity = "1";
+        showMessage("Erreur lors du chargement de la photo", "error");
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+// Fonction pour afficher les messages
+function showMessage(text, type) {
+    const message = document.getElementById('message');
+    message.textContent = text;
+    message.className = type === 'success' ? 'message-success' : 'message-error';
+    message.style.display = 'block';
+    
+    // Masquer le message après 5 secondes
+    setTimeout(() => {
+        message.style.display = 'none';
+    }, 5000);
+}
+
+// Effets visuels sur les inputs
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateY(-2px)';
+    });
+    
+    input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'translateY(0)';
+    });
+});
+
+// Mise à jour du label de fichier
+document.getElementById('photo').addEventListener('change', function() {
+    const label = document.querySelector('.file-input-label');
+    if (this.files.length > 0) {
+        const file = this.files[0];
+        label.innerHTML = `
+            📸 <strong>${file.name}</strong>
+            <br>
+            <small>${(file.size / 1024 / 1024).toFixed(2)} MB</small>
+        `;
+        label.style.borderColor = 'var(--neon-cyan)';
+        label.style.color = 'var(--neon-cyan)';
+    }
+});
+</script>
+</body>
+</html>
