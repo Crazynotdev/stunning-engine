@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galerie Drip Technic</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --neon-pink: #ff3753;
+    --neon-cyan: #00ffcc;
+    --neon-purple: #9d4edd;
+    --dark-bg: #0a0a0f;
+    --card-bg: rgba(25, 25, 35, 0.95);
+    --grid-bg: #111118;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--dark-bg);
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Background effects */
+.background-effects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: 
+        radial-gradient(circle at 10% 10%, rgba(255, 55, 83, 0.1) 0%, transparent 30%),
+        radial-gradient(circle at 90% 90%, rgba(0, 255, 204, 0.1) 0%, transparent 30%),
+        linear-gradient(135deg, #0a0a0f 0%, #151520 100%);
+}
+
+/* Header */
+.header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.header h1::after {
+    content: '🔥';
+    margin-left: 15px;
+    animation: fire 1.5s infinite alternate;
+}
+
+.header .subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* Stats bar */
+.stats-bar {
+    background: rgba(20, 20, 30, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 15px 20px;
+    margin: 0 auto 30px;
+    max-width: 1200px;
+    border-radius: 0 0 16px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: none;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Gallery grid */
+.gallery-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 10px;
+}
+
+/* Card styling */
+.card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+}
+
+.card:hover {
+    transform: translateY(-10px) rotateX(5deg);
+    border-color: var(--neon-pink);
+    box-shadow: 
+        0 20px 40px rgba(255, 55, 83, 0.2),
+        0 0 30px rgba(255, 55, 83, 0.1);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+/* Image container */
+.card-image {
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+    background: #000;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card:hover .card-image img {
+    transform: scale(1.05);
+}
+
+/* Badge validated */
+.validated-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 255, 136, 0.2);
+    color: var(--neon-cyan);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.validated-badge::before {
+    content: '✓';
+    font-weight: bold;
+}
+
+/* Card content */
+.card-content {
+    padding: 20px;
+}
+
+.card-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Votes display */
+.votes-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+}
+
+.vote-count {
+    text-align: center;
+}
+
+.vote-label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.vote-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+.smash-count .vote-value {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+.pass-count .vote-value {
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px rgba(255, 55, 83, 0.5);
+}
+
+.vote-separator {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Vote button */
+.vote-button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.vote-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 10px 20px rgba(255, 55, 83, 0.3),
+        0 0 30px rgba(157, 78, 221, 0.2);
+}
+
+.vote-button::after {
+    content: '→';
+    position: absolute;
+    right: 20px;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.vote-button:hover::after {
+    opacity: 1;
+    right: 15px;
+}
+
+/* Empty state */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.3;
+}
+
+.empty-state h3 {
+    font-size: 1.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    color: rgba(255, 255, 255, 0.4);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Animations */
+@keyframes fire {
+    0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.2) rotate(10deg);
+        opacity: 0.8;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: slideUp 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+/* Glow effects */
+.glow-effect {
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--neon-pink), transparent 70%);
+    filter: blur(100px);
+    opacity: 0.08;
+    animation: float 30s infinite linear;
+    z-index: -1;
+}
+
+.glow-effect:nth-child(2) {
+    background: radial-gradient(circle, var(--neon-cyan), transparent 70%);
+    animation-delay: -15s;
+    top: 60%;
+    left: 80%;
+}
+
+@keyframes float {
+    0% { transform: rotate(0deg) translateX(200px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(200px) rotate(-360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .stats-bar {
+        padding: 12px 15px;
+        gap: 15px;
+    }
+    
+    .stat-value {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .header {
+        padding: 30px 15px 20px;
+    }
+    
+    .header h1 {
+        font-size: 1.8rem;
+    }
+}
+</style>
+</head>
+<body>
+    <!-- Effets de fond -->
+    <div class="background-effects"></div>
+    <div class="glow-effect" style="top: 10%; left: 5%;"></div>
+    <div class="glow-effect" style="top: 80%; left: 85%;"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Galerie Officielle</h1>
+        <p class="subtitle">Smash or Pass - Découvrez les participants validés et votez pour votre style préféré</p>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-item">
+            <div class="stat-value" id="totalParticipants">0</div>
+            <div class="stat-label">Participants</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="totalVotes">0</div>
+            <div class="stat-label">Votes Totaux</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="topSmash">0</div>
+            <div class="stat-label">Record Smash</div>
+        </div>
+    </div>
+
+    <!-- Gallery grid -->
+    <div class="gallery-container">
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Les cartes seront générées ici par JavaScript -->
+        </div>
+    </div>
+
+<script>
+// Récupération des données (logique inchangée)
+let db = JSON.parse(localStorage.getItem("drip_db")) || { participants: [], votes: {} };
+let galleryGrid = document.getElementById("galleryGrid");
+
+// Filtrer les participants validés
+let validatedParticipants = db.participants.filter(p => p.validated);
+
+// Calcul des statistiques
+function calculateStats() {
+    let totalSmash = 0;
+    let totalPass = 0;
+    let topSmash = 0;
+    
+    validatedParticipants.forEach(p => {
+        totalSmash += p.smash || 0;
+        totalPass += p.pass || 0;
+        if (p.smash > topSmash) {
+            topSmash = p.smash;
+        }
+    });
+    
+    // Mise à jour des stats
+    document.getElementById('totalParticipants').textContent = validatedParticipants.length;
+    document.getElementById('totalVotes').textContent = totalSmash + totalPass;
+    document.getElementById('topSmash').textContent = topSmash;
+}
+
+// Fonction pour formatter les nombres
+function formatNumber(num) {
+    return num >= 1000 ? (num/1000).toFixed(1) + 'k' : num;
+}
+
+// Génération de la galerie
+if (validatedParticipants.length === 0) {
+    // Afficher un état vide
+    galleryGrid.innerHTML = `
+        <div class="empty-state">
+            <div class="empty-state-icon">👤</div>
+            <h3>Aucun participant validé</h3>
+            <p>La galerie s'affichera ici une fois que les administrateurs auront validé les inscriptions.</p>
+            <a href="index.html" style="
+                display: inline-block;
+                margin-top: 20px;
+                padding: 12px 24px;
+                background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan));
+                color: white;
+                text-decoration: none;
+                border-radius: 12px;
+                font-weight: 600;
+            ">← Retour à l'accueil</a>
+        </div>
+    `;
+} else {
+    // Générer les cartes avec délai d'animation
+    validatedParticipants.forEach((p, index) => {
+        // Créer l'élément de carte
+        let card = document.createElement('div');
+        card.className = 'card';
+        card.style.animationDelay = `${index * 0.1}s`;
+        
+        card.innerHTML = `
+            <div class="card-image">
+                <img src="${p.photo}" alt="${p.name}" loading="lazy">
+                <div class="validated-badge">Validé</div>
+            </div>
+            <div class="card-content">
+                <h3 class="card-name">${p.name}</h3>
+                
+                <div class="votes-display">
+                    <div class="vote-count smash-count">
+                        <div class="vote-label">Smash</div>
+                        <div class="vote-value">${formatNumber(p.smash || 0)}</div>
+                    </div>
+                    
+                    <div class="vote-separator"></div>
+                    
+                    <div class="vote-count pass-count">
+                        <div class="vote-label">Pass</div>
+                        <div class="vote-value">${formatNumber(p.pass || 0)}</div>
+                    </div>
+                </div>
+                
+                <a href="vote.html?id=${p.id}" class="vote-button">
+                    Voter pour ce style
+                </a>
+            </div>
+        `;
+        
+        galleryGrid.appendChild(card);
+    });
+}
+
+// Calculer et afficher les statistiques
+calculateStats();
+
+// Rafraîchir les stats toutes les 30 secondes (pour les votes en temps réel)
+setInterval(calculateStats, 30000);
+
+// Effet de hover 3D sur les cartes
+document.addEventListener('mousemove', function(e) {
+    const cards = document.querySelectorAll('.card');
+    
+    cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateY = (x - centerX) / 25;
+        const rotateX = (centerY - y) / 25;
+        
+        if (card.matches(':hover')) {
+            card.style.transform = `
+                perspective(1000px) 
+                rotateX(${rotateX}deg) 
+                rotateY(${rotateY}deg) 
+                translateY(-10px)
+            `;
+        }
+    });
+});
+
+// Réinitialiser la transformation quand la souris quitte
+document.addEventListener('mouseout', function(e) {
+    if (!e.target.closest('.card')) {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+        });
+    }
+});
+
+// Système de filtrage (optionnel - pour une future fonctionnalité)
+function setupFilterButtons() {
+    // Vous pouvez ajouter des boutons de filtrage ici
+    // Par exemple : Trier par plus de smash, plus récents, etc.
+}
+</script>
+</body>
+</html>
