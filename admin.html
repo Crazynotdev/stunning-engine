@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Admin</title>
+<style>
+body{background:#111;color:#fff;font-family:Arial}
+.card{border:1px solid #333;padding:10px;margin:10px}
+button{background:#2196f3;color:#fff;border:none;padding:5px}
+</style>
+</head>
+<body>
+
+<h2>ADMIN VALIDATION</h2>
+<div id="list"></div>
+
+<script>
+let db=JSON.parse(localStorage.getItem("drip_db"))
+let list=document.getElementById("list")
+
+db.participants.forEach(p=>{
+ if(p.paid && !p.validated){
+  let d=document.createElement("div")
+  d.className="card"
+  d.innerHTML=`${p.name}<br>${p.phone}<br>
+  <button onclick="validate('${p.id}')">Valider</button>`
+  list.appendChild(d)
+ }
+})
+
+function validate(id){
+ let p=db.participants.find(x=>x.id===id)
+ p.validated=true
+ localStorage.setItem("drip_db",JSON.stringify(db))
+ location.reload()
+}
+</script>
+</body>
+</html>
