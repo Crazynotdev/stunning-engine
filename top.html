@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classement - Drip Technic</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --neon-gold: #ffd700;
+    --neon-silver: #c0c0c0;
+    --neon-bronze: #cd7f32;
+    --neon-pink: #ff3753;
+    --neon-cyan: #00ffcc;
+    --neon-purple: #9d4edd;
+    --dark-bg: #0a0a0f;
+    --card-bg: rgba(25, 25, 35, 0.95);
+    --table-bg: rgba(30, 30, 40, 0.8);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--dark-bg);
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Background effects */
+.background-effects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: 
+        radial-gradient(circle at 10% 10%, rgba(255, 215, 0, 0.1) 0%, transparent 30%),
+        radial-gradient(circle at 90% 90%, rgba(0, 255, 204, 0.1) 0%, transparent 30%),
+        linear-gradient(135deg, #0a0a0f 0%, #151520 100%);
+}
+
+/* Header */
+.header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, var(--neon-gold), var(--neon-silver), var(--neon-bronze));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+    display: inline-block;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+.header h1::after {
+    content: '🏆';
+    margin-left: 20px;
+    animation: bounce 2s infinite;
+}
+
+.header .subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* Stats overview */
+.stats-overview {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    border-color: var(--neon-cyan);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 255, 204, 0.1);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.stat-value {
+    font-size: 2.8rem;
+    font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* Ranking container */
+.ranking-container {
+    max-width: 1200px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+}
+
+/* Podium */
+.podium {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin: 40px 0;
+    align-items: end;
+}
+
+.podium-place {
+    text-align: center;
+    position: relative;
+}
+
+.podium-stand {
+    border-radius: 12px 12px 0 0;
+    padding: 30px 20px;
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.podium-stand::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+}
+
+.podium-stand.first {
+    background: linear-gradient(180deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    height: 280px;
+}
+
+.podium-stand.first::before {
+    background: var(--neon-gold);
+}
+
+.podium-stand.second {
+    background: linear-gradient(180deg, rgba(192, 192, 192, 0.2), rgba(192, 192, 192, 0.05));
+    border: 1px solid rgba(192, 192, 192, 0.3);
+    height: 220px;
+}
+
+.podium-stand.second::before {
+    background: var(--neon-silver);
+}
+
+.podium-stand.third {
+    background: linear-gradient(180deg, rgba(205, 127, 50, 0.2), rgba(205, 127, 50, 0.05));
+    border: 1px solid rgba(205, 127, 50, 0.3);
+    height: 180px;
+}
+
+.podium-stand.third::before {
+    background: var(--neon-bronze);
+}
+
+.podium-medal {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.podium-medal.first {
+    background: radial-gradient(circle at 30% 30%, var(--neon-gold), #b8860b);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+}
+
+.podium-medal.second {
+    background: radial-gradient(circle at 30% 30%, var(--neon-silver), #808080);
+    box-shadow: 0 10px 30px rgba(192, 192, 192, 0.3);
+}
+
+.podium-medal.third {
+    background: radial-gradient(circle at 30% 30%, var(--neon-bronze), #8b4513);
+    box-shadow: 0 10px 30px rgba(205, 127, 50, 0.3);
+}
+
+.podium-info {
+    margin-top: 20px;
+}
+
+.podium-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.podium-score {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.podium-votes {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Ranking table */
+.ranking-table-container {
+    background: var(--table-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 40px;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 80px 2fr 1fr 1fr 1fr 1fr;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+.ranking-table {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.ranking-row {
+    display: grid;
+    grid-template-columns: 80px 2fr 1fr 1fr 1fr 1fr;
+    padding: 20px;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.ranking-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.ranking-row::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: transparent;
+    transition: all 0.3s;
+}
+
+.ranking-row:hover::after {
+    background: var(--neon-cyan);
+}
+
+/* Position cell */
+.position-cell {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+.position-medal {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.position-1 { color: var(--neon-gold); }
+.position-2 { color: var(--neon-silver); }
+.position-3 { color: var(--neon-bronze); }
+.position-4-10 { color: var(--neon-cyan); }
+.position-other { color: rgba(255, 255, 255, 0.5); }
+
+/* Participant cell */
+.participant-cell {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.participant-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.participant-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Score cells */
+.score-cell {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.smash-cell { color: var(--neon-cyan); }
+.pass-cell { color: var(--neon-pink); }
+.total-cell { 
+    color: var(--neon-gold);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Progress bar */
+.score-progress {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.score-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    border-radius: 4px;
+    transition: width 1s ease-out;
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+    padding: 0 20px;
+    flex-wrap: wrap;
+}
+
+.action-button {
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 200px;
+}
+
+.action-button.gallery {
+    background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+    color: white;
+}
+
+.action-button.vote {
+    background: linear-gradient(45deg, var(--neon-cyan), #00a8ff);
+    color: #000;
+}
+
+.action-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 255, 204, 0.2);
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.empty-state-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    opacity: 0.3;
+}
+
+.empty-state h2 {
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 15px;
+}
+
+.empty-state p {
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Animations */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.1); }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ranking-row {
+    animation: slideUp 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+/* Glow effects */
+.glow-effect {
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--neon-gold), transparent 70%);
+    filter: blur(100px);
+    opacity: 0.08;
+    animation: float 30s infinite linear;
+    z-index: -1;
+}
+
+.glow-effect:nth-child(2) {
+    background: radial-gradient(circle, var(--neon-cyan), transparent 70%);
+    animation-delay: -15s;
+    top: 60%;
+    left: 80%;
+}
+
+@keyframes float {
+    0% { transform: rotate(0deg) translateX(200px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(200px) rotate(-360deg); }
+}
+
+/* Scrollbar styling */
+.ranking-table::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ranking-table::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.ranking-table::-webkit-scrollbar-thumb {
+    background: var(--neon-cyan);
+    border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .table-header,
+    .ranking-row {
+        grid-template-columns: 60px 2fr 1fr 1fr 1fr;
+    }
+    
+    .position-cell {
+        font-size: 1.3rem;
+    }
+    
+    .participant-avatar {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .podium {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .podium-stand {
+        height: 180px !important;
+    }
+    
+    .table-header,
+    .ranking-row {
+        grid-template-columns: 50px 2fr 1fr 1fr;
+        font-size: 0.9rem;
+        padding: 15px;
+    }
+    
+    .participant-cell {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .action-button {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .stats-overview {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-value {
+        font-size: 2.2rem;
+    }
+    
+    .table-header,
+    .ranking-row {
+        grid-template-columns: 40px 2fr 1fr;
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+    
+    .position-cell {
+        font-size: 1.1rem;
+    }
+    
+    .participant-name {
+        font-size: 1rem;
+    }
+}
+</style>
+</head>
+<body>
+    <!-- Effets de fond -->
+    <div class="background-effects"></div>
+    <div class="glow-effect" style="top: 15%; left: 5%;"></div>
+    <div class="glow-effect" style="top: 75%; left: 90%;"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>TOP DRIP</h1>
+        <p class="subtitle">Le classement officiel des meilleurs styles Drip Technic</p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-overview" id="statsOverview">
+        <!-- Généré dynamiquement -->
+    </div>
+
+    <!-- Podium -->
+    <div class="ranking-container">
+        <div id="podiumContainer">
+            <!-- Généré dynamiquement -->
+        </div>
+
+        <!-- Ranking Table -->
+        <div class="ranking-table-container">
+            <div class="table-header">
+                <div>RANG</div>
+                <div>PARTICIPANT</div>
+                <div>🔥 SMASH</div>
+                <div>❌ PASS</div>
+                <div>SCORE</div>
+                <div>RATIO</div>
+            </div>
+            
+            <div class="ranking-table" id="rankingTable">
+                <!-- Généré dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="gallery.html" class="action-button gallery">
+                <span>👁️</span>
+                <span>Voir la Galerie</span>
+            </a>
+            <a href="index.html" class="action-button vote">
+                <span>🏠</span>
+                <span>Retour à l'Accueil</span>
+            </a>
+        </div>
+    </div>
+
+<script>
+// Récupération des données (logique inchangée)
+let db = JSON.parse(localStorage.getItem("drip_db")) || { participants: [], votes: {} };
+let statsOverview = document.getElementById('statsOverview');
+let podiumContainer = document.getElementById('podiumContainer');
+let rankingTable = document.getElementById('rankingTable');
+
+// Filtrer et trier les participants (logique inchangée)
+let validatedParticipants = db.participants.filter(p => p.validated);
+
+// Calculer les scores (score = smash - pass)
+validatedParticipants.forEach(p => {
+    p.score = (p.smash || 0) - (p.pass || 0);
+    p.totalVotes = (p.smash || 0) + (p.pass || 0);
+    p.ratio = p.totalVotes > 0 ? ((p.smash || 0) / p.totalVotes * 100).toFixed(1) : 0;
+});
+
+// Trier par score (logique inchangée)
+let rankedParticipants = [...validatedParticipants].sort((a, b) => b.score - a.score);
+
+// Trouver les scores maximums pour les progress bars
+let maxSmash = Math.max(...rankedParticipants.map(p => p.smash || 0), 1);
+let maxTotal = Math.max(...rankedParticipants.map(p => p.totalVotes), 1);
+
+// Calculer les statistiques globales
+function calculateGlobalStats() {
+    let totalParticipants = rankedParticipants.length;
+    let totalSmash = rankedParticipants.reduce((sum, p) => sum + (p.smash || 0), 0);
+    let totalPass = rankedParticipants.reduce((sum, p) => sum + (p.pass || 0), 0);
+    let totalVotes = totalSmash + totalPass;
+    
+    return {
+        totalParticipants,
+        totalVotes,
+        totalSmash,
+        totalPass,
+        smashRatio: totalVotes > 0 ? ((totalSmash / totalVotes) * 100).toFixed(1) : 0
+    };
+}
+
+// Afficher les statistiques globales
+function renderStatsOverview() {
+    const stats = calculateGlobalStats();
+    
+    statsOverview.innerHTML = `
+        <div class="stat-card">
+            <span class="stat-icon">👥</span>
+            <div class="stat-value">${stats.totalParticipants}</div>
+            <div class="stat-label">Participants</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">🗳️</span>
+            <div class="stat-value">${stats.totalVotes}</div>
+            <div class="stat-label">Votes Totaux</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">🔥</span>
+            <div class="stat-value">${stats.totalSmash}</div>
+            <div class="stat-label">Smash Totaux</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">📊</span>
+            <div class="stat-value">${stats.smashRatio}%</div>
+            <div class="stat-label">Ratio Smash</div>
+        </div>
+    `;
+}
+
+// Afficher le podium (top 3)
+function renderPodium() {
+    if (rankedParticipants.length === 0) {
+        podiumContainer.innerHTML = '';
+        return;
+    }
+    
+    const top3 = rankedParticipants.slice(0, 3);
+    
+    podiumContainer.innerHTML = `
+        <div class="podium">
+            ${top3.map((p, index) => {
+                const places = ['second', 'first', 'third']; // Ordre d'affichage: 2ème, 1er, 3ème
+                const medals = ['🥈', '🥇', '🥉'];
+                
+                return `
+                    <div class="podium-place">
+                        <div class="podium-stand ${places[index]}">
+                            <div class="podium-medal ${places[index]}">
+                                ${medals[index]}
+                            </div>
+                            <div class="podium-info">
+                                <div class="podium-name">${p.name}</div>
+                                <div class="podium-score" style="color: ${index === 1 ? 'var(--neon-gold)' : index === 0 ? 'var(--neon-silver)' : 'var(--neon-bronze)'}">
+                                    ${p.score}
+                                </div>
+                                <div class="podium-votes">
+                                    ${p.smash || 0} 🔥 / ${p.pass || 0} ❌
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+}
+
+// Afficher le tableau de classement
+function renderRankingTable() {
+    if (rankedParticipants.length === 0) {
+        rankingTable.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">👤</div>
+                <h2>Aucun participant validé</h2>
+                <p>Le classement s'affichera ici une fois que les administrateurs auront validé les inscriptions et que les votes auront commencé.</p>
+                <a href="gallery.html" style="
+                    display: inline-block;
+                    margin-top: 20px;
+                    padding: 12px 24px;
+                    background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan));
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 12px;
+                    font-weight: 600;
+                ">← Voir la galerie</a>
+            </div>
+        `;
+        return;
+    }
+    
+    let tableHTML = '';
+    
+    rankedParticipants.forEach((p, index) => {
+        const position = index + 1;
+        let positionClass = 'position-other';
+        
+        if (position === 1) positionClass = 'position-1';
+        else if (position === 2) positionClass = 'position-2';
+        else if (position === 3) positionClass = 'position-3';
+        else if (position <= 10) positionClass = 'position-4-10';
+        
+        // Calculer la largeur de la progress bar
+        const smashPercent = ((p.smash || 0) / maxSmash * 100);
+        const ratioPercent = p.ratio;
+        
+        // Animation delay pour l'entrée
+        const animationDelay = index * 0.05;
+        
+        tableHTML += `
+            <div class="ranking-row" style="animation-delay: ${animationDelay}s">
+                <div class="position-cell ${positionClass}">
+                    ${position <= 3 ? 
+                        `<span class="position-medal" style="background: ${position === 1 ? 'var(--neon-gold)' : position === 2 ? 'var(--neon-silver)' : 'var(--neon-bronze)'}">
+                            ${position}
+                        </span>` : 
+                        `<span>${position}</span>`
+                    }
+                </div>
+                
+                <div class="participant-cell">
+                    <img src="${p.photo}" alt="${p.name}" class="participant-avatar" onerror="this.src='https://via.placeholder.com/50'">
+                    <div>
+                        <div class="participant-name">${p.name}</div>
+                        <div class="score-progress">
+                            <div class="score-progress-fill" style="width: ${ratioPercent}%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="score-cell smash-cell">
+                    ${p.smash || 0}
+                </div>
+                
+                <div class="score-cell pass-cell">
+                    ${p.pass || 0}
+                </div>
+                
+                <div class="score-cell total-cell">
+                    ${p.score}
+                </div>
+                
+                <div class="score-cell">
+                    ${p.ratio}%
+                </div>
+            </div>
+        `;
+    });
+    
+    rankingTable.innerHTML = tableHTML;
+}
+
+// Initialiser la page
+function initPage() {
+    renderStatsOverview();
+    renderPodium();
+    renderRankingTable();
+    
+    // Mettre à jour toutes les 10 secondes (pour les votes en temps réel)
+    setInterval(() => {
+        // Recharger les données
+        db = JSON.parse(localStorage.getItem("drip_db")) || { participants: [], votes: {} };
+        validatedParticipants = db.participants.filter(p => p.validated);
+        
+        validatedParticipants.forEach(p => {
+            p.score = (p.smash || 0) - (p.pass || 0);
+            p.totalVotes = (p.smash || 0) + (p.pass || 0);
+            p.ratio = p.totalVotes > 0 ? ((p.smash || 0) / p.totalVotes * 100).toFixed(1) : 0;
+        });
+        
+        rankedParticipants = [...validatedParticipants].sort((a, b) => b.score - a.score);
+        
+        // Recalculer les maximums
+        maxSmash = Math.max(...rankedParticipants.map(p => p.smash || 0), 1);
+        maxTotal = Math.max(...rankedParticipants.map(p => p.totalVotes), 1);
+        
+        // Mettre à jour l'affichage
+        renderStatsOverview();
+        renderPodium();
+        renderRankingTable();
+    }, 10000);
+}
+
+// Démarrer l'application
+initPage();
+
+// Effets interactifs
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation des progress bars
+    setTimeout(() => {
+        const progressBars = document.querySelectorAll('.score-progress-fill');
+        progressBars.forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0';
+            setTimeout(() => {
+                bar.style.transition = 'width 1.5s ease-out';
+                bar.style.width = width;
+            }, 300);
+        });
+    }, 500);
+    
+    // Effet de hover sur les lignes du tableau
+    document.addEventListener('mousemove', function(e) {
+        const rows = document.querySelectorAll('.ranking-row');
+        
+        rows.forEach(row => {
+            const rect = row.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                row.style.background = 'rgba(255, 255, 255, 0.05)';
+            } else {
+                row.style.background = '';
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
